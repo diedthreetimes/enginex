@@ -44,6 +44,10 @@ class EnginexTest < ActiveSupport::TestCase
     end
   end
 
+  test "enginex skeleton with generators" do
+    assert(false)
+  end
+
   test "enginex rakefile can create a gem" do
     run_enginex do
       execute("gem build demo_engine.gemspec")
@@ -56,10 +60,14 @@ class EnginexTest < ActiveSupport::TestCase
       assert_match /2 tests, 2 assertions, 0 failures, 0 errors/, execute("rake test")
     end
   end
-  
+
   test "enginex can run specs" do
     run_enginex(:rspec) do
       assert_match /2 examples, 0 failures/, execute("rake spec")
     end
+  end
+
+  test "enginex can create generators" do
+    assert(false)
   end
 end
