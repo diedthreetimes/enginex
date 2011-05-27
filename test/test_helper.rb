@@ -22,12 +22,21 @@ $:.unshift LIB_PATH
 require 'enginex'
 
 class ActiveSupport::TestCase
-  def run_enginex(suite = :test_unit)
+  def run_enginex(suite = :test_unit, generators = false, tasks = false)
     if suite == :rspec
       option = '--test-framework=rspec'
     else
       option = '--test-framework=test_unit'
     end
+
+    if generators
+      option += ' --generators'
+    end
+
+    if tasks
+      option += ' --rake_tasks'
+    end
+
 
     $counter += 1
     `ruby -I#{LIB_PATH} -rrubygems #{BIN_PATH} #{destination_root} #{option}`
@@ -53,6 +62,17 @@ class ActiveSupport::TestCase
     end
   end
   alias :silence :capture
+
+  def assert_file_like(pattern, *contents, &block)
+    files = Dir.glob(pattern)
+
+    assert files.length == 1, "Expected pattern \"#{pattern}\" to match a file, #{files.length} found."
+
+    files.each{ |file|
+      assert_file(file, *contents, &block)
+    }
+
+  end
 
   def assert_file(relative, *contents)
     absolute = File.expand_path(relative, destination_root)

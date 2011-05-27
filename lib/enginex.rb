@@ -29,7 +29,13 @@ class Enginex < Thor::Group
 
   class_option :test_framework, :default => "test_unit", :aliases => "-t",
                                 :desc => "Test framework to use. test_unit or rspec."
-  
+
+  class_option :generators, :default => false, :aliases => "-g", :type => :boolean,
+                            :desc => "Create migration generators."
+
+  class_option :rake_tasks, :default => false, :aliases => "-r", :type => :boolean,
+                       :desc => "Create inheritable rake tasks."
+
   desc "Creates a Rails 3 engine with Rakefile, Gemfile and running tests."
 
   say_step "Creating gem skeleton"
@@ -44,6 +50,16 @@ class Enginex < Thor::Group
 
   def create_tests_or_specs
     directory test_path
+  end
+
+  def create_generators
+    directory generator_path, File.join('lib', generator_path) if generators?
+    #template # TODO: stick in migration test template
+  end
+
+  def create_tasks
+    directory rake_path, "lib/#{underscored}" if rake?
+    #template # TODO: stick in task test template
   end
 
   def change_gitignore
@@ -93,8 +109,24 @@ class Enginex < Thor::Group
       options[:test_framework] == "test_unit"
     end
 
+    def generators?
+      options[:generators] == true
+    end
+
+    def rake?
+      options[:rake_tasks] == true
+    end
+
     def test_path
       rspec? ? "spec" : "test"
+    end
+
+    def generator_path
+      "generators"
+    end
+
+    def rake_path
+      "rake/%underscored%"
     end
 
     def dummy_path
