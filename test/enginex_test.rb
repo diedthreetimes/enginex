@@ -67,17 +67,16 @@ class EnginexTest < ActiveSupport::TestCase
 
   test "enginex can create generators" do
     run_enginex(:test_unit, :all) do
-      assert(false) # run this test in the context of the generated app
-      #execute("rails generate demo_engine")
-      #assert_file_like "test/dummy/db/migrate/[0-9]*demo_engine_create_tables.rb", /class DemoEngineCreateTables < ActiveRecord::Migration/
+      execute_as_dummys_dummy "rails generate demo_engine"
+      assert_file_like "test/dummy/db/migrate/[0-9]*demo_engine_create_tables.rb", /class DemoEngineCreateTables < ActiveRecord::Migration/
     end
   end
 
-  test "enginex can create rake tasks" do
-    run_enginex(:test_unit, :all, :rake) do
-      assert(false) # run this test in the context of the generated app
-    end
-  end
+  # test "enginex can create rake tasks" do
+  #   run_enginex(:test_unit, :all, :rake) do
+  #     #TODO: need to have a sample rake task to run
+  #   end
+  # end
 
 
   test "enginex rakefile can create a gem" do

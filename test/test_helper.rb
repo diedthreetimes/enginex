@@ -64,14 +64,13 @@ class ActiveSupport::TestCase
   alias :silence :capture
 
   def assert_file_like(pattern, *contents, &block)
-    files = Dir.glob(pattern)
+    files = Dir.glob(File.join(destination_root,pattern))
 
     assert files.length == 1, "Expected pattern \"#{pattern}\" to match a file, #{files.length} found."
 
     files.each{ |file|
       assert_file(file, *contents, &block)
     }
-
   end
 
   def assert_file(relative, *contents)
@@ -93,9 +92,17 @@ class ActiveSupport::TestCase
   end
   alias :assert_no_directory :assert_no_file
 
+  def execute_as_dummys_dummy(command)
+    execute_from command, File.join( destination_root, 'test/dummy' )
+  end
+
   def execute(command)
+    execute_from command, destination_root
+  end
+
+  def execute_from(command, path)
     current_path = Dir.pwd
-    FileUtils.cd destination_root
+    FileUtils.cd path
     `#{command}`
   ensure
     FileUtils.cd current_path
