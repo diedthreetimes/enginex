@@ -15,7 +15,21 @@ require "capybara/rails"
 Capybara.default_driver   = :rack_test
 Capybara.default_selector = :css
 
-# Run any available migration
+
+# We need to find a way to generate and run any migrations before running the tests
+# This method isn't very clean/fast but it works
+<% if generators? %>
+# Clean the db
+ActiveRecord::Base.connection.tables.each do |table|
+  ActiveRecord::Base.connection.drop_table(table)
+end
+# Generate any necessary migrations
+FileUtils.cd( "test/dummy" )
+system( "rails generate archiver" )
+FileUtils.cd( "../../")
+<% end %>
+
+# Run all available migrations
 ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
 
 # Load support files
