@@ -11,6 +11,9 @@ class EnginexTest < ActiveSupport::TestCase
       # Lib
       assert_file "lib/demo_engine.rb", /module DemoEngine\nend/
 
+      assert_directory "lib/demo_engine"
+      assert_file "lib/demo_engine/engine.rb", /class Engine < Rails::Engine/
+
       # Vendored Rails
       assert_file "test/dummy/config/boot.rb"
       assert_file "test/dummy/config/application.rb"
@@ -57,7 +60,6 @@ class EnginexTest < ActiveSupport::TestCase
 
   test "enginex skeleton with tasks" do
     run_enginex(:test_unit, :all, :rake) do
-      assert_directory 'lib/demo_engine/'
       assert_directory 'lib/demo_engine/railties/'
 
       assert_file 'lib/demo_engine/railties/tasks.rake'
