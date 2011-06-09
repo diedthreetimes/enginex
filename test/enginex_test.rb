@@ -92,6 +92,14 @@ class EnginexTest < ActiveSupport::TestCase
     end
   end
 
+  test "enginex can run tests that create JUnit xmls" do
+    run_enginex(:test_unit) do
+      execute("rake test")
+      assert_file "test/reports/TEST-NavigationTest.xml", /failures="0"/
+      assert_file "test/reports/TEST-DemoEngineTest.xml", /failures="0"/
+    end
+  end
+
   test "enginex can run specs" do
     run_enginex(:rspec) do
       assert_match /2 examples, 0 failures/, execute("rake spec")

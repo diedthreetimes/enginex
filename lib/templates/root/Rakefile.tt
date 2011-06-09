@@ -15,13 +15,15 @@ require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec)
 <% else -%>
 require 'rake/testtask'
-
+require 'ci/reporter/rake/test_unit'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.libs << 'test'
   t.pattern = 'test/**/*_test.rb'
   t.verbose = false
 end
+
+task :<%= test_path %> => :"ci:setup:testunit"
 <% end -%>
 
 task :default => :<%= test_path %>

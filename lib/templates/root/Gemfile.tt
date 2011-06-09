@@ -3,13 +3,17 @@ source "http://rubygems.org"
 gem "rails", "<%= ActiveSupport::VERSION::STRING %>"
 gem "sqlite3"
 
-
 group :test, :development do
   gem "rake"
   gem "capybara", ">= 0.4.0"
 
   <%- if rdoc? %>
   gem "rdoc"
+  <% end %>
+  
+  <%- if test_unit? %>
+  gem 'test-unit', '1.2.3' # ci_reporter 1.9.2 dependency
+  gem 'ci_reporter'
   <% end %>
 
   <%- if rspec? %>
