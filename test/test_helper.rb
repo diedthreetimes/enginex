@@ -22,7 +22,7 @@ $:.unshift LIB_PATH
 require 'enginex'
 
 class ActiveSupport::TestCase
-  def run_enginex(suite = :test_unit, generators = false, tasks = false)
+  def run_enginex(suite = :test_unit, generators = false, tasks = false, gemspec = false)
     if suite == :rspec
       option = '--test-framework=rspec'
     else
@@ -37,6 +37,9 @@ class ActiveSupport::TestCase
       option += ' --rake_tasks'
     end
 
+    if gemspec
+      option += ' --gemspec'
+    end
 
     $counter += 1
     `ruby -I#{LIB_PATH} -rrubygems #{BIN_PATH} #{destination_root} #{option}`

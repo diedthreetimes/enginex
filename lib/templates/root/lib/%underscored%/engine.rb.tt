@@ -1,0 +1,14 @@
+require "<%= underscored %>"
+require "rails"
+
+module <%= camelized %>
+  class Engine < Rails::Engine
+
+    <% if rake? %>
+    rake_tasks do
+      load "<%= underscored %>/railties/tasks.rake"
+    end
+    <% end %>
+
+  end
+end

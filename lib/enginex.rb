@@ -39,6 +39,9 @@ class Enginex < Thor::Group
   class_option :nordoc, :default => true, :aliases => "-d", :type => :boolean,
                       :dec => "Don't generate an rdoc task."
 
+  class_option :gemspec, :default => false, :aliases => "-gem", :type => :boolean,
+                         :desc => "Use gemspec instead of the jeweler."
+
   desc "Creates a Rails 3 engine with Rakefile, Gemfile and running tests."
 
   say_step "Creating gem skeleton"
@@ -57,16 +60,18 @@ class Enginex < Thor::Group
 
   def create_generators
     directory generator_path, File.join('lib', generator_path) if generators?
-    #template # TODO: stick in migration test template
   end
 
   def create_tasks
     directory rake_path, "lib/#{underscored}" if rake?
-    #template # TODO: stick in task test template
   end
 
   def change_gitignore
     template "gitignore", ".gitignore"
+  end
+
+  def create_gemspec
+    template "%underscored%.gemspec.tt", "#{underscored}.gemspec" if gemspec?
   end
 
   say_step "Vendoring Rails application at test/dummy"
@@ -122,6 +127,14 @@ class Enginex < Thor::Group
 
     def rdoc?
       options[:nordoc] == true
+    end
+
+    def gemspec?
+      options[:gemspec] == true
+    end
+
+    def jeweler?
+      !gemspec?
     end
 
     def test_path
