@@ -36,6 +36,9 @@ class Enginex < Thor::Group
   class_option :rake_tasks, :default => false, :aliases => "-r", :type => :boolean,
                        :desc => "Create inheritable rake tasks."
 
+  class_option :nordoc, :default => true, :aliases => "-d", :type => :boolean,
+                      :dec => "Don't generate an rdoc task."
+
   desc "Creates a Rails 3 engine with Rakefile, Gemfile and running tests."
 
   say_step "Creating gem skeleton"
@@ -115,6 +118,10 @@ class Enginex < Thor::Group
 
     def rake?
       options[:rake_tasks] == true
+    end
+
+    def rdoc?
+      options[:nordoc] == true
     end
 
     def test_path
